@@ -1,0 +1,126 @@
+#take Graph from user
+def inputGraph():
+    cont = 1
+    G = dict()
+    while cont:
+        u = input('Enter from: ')
+        v = raw_input('Enter to (a list): ').split()
+        v = [int(i) for i in v ]
+        print u , v
+        add(G , u, v)
+        cont = input('Continue(1): ')
+    disp(G)
+    return G
+
+#disp func
+def disp(G):
+    for key in G:
+        print key, '-->', G[key]
+#add func
+def add(G, u, v):
+    for i in range(len(v)):
+        if u not in G.keys():
+            new_list = list()
+            new_list.append(v[i])
+            G[u] = new_list
+        else:
+            G[u].append(v[i])
+    if not v:
+        if u not in G.keys():
+            new_list = list()
+            new_list.append(None)
+            G[u] = new_list
+        else:
+            G[u].append(None)
+#define Graph
+G = dict()
+add(G, 1, [2, 3])
+add(G, 2, [1, 3])
+add(G, 3, [1, 2, 4, 5, 6])
+add(G, 4, [3, 5])
+add(G, 5, [3, 4, 6])
+add(G, 6, [3, 5])
+add(G, 7, [])
+print disp(G)
+
+#map color
+
+def mapColorMin(G):
+    colorArray = 'red blue green yellow pink white black orange'
+    colorArray = colorArray.split()
+    mapColor = dict()
+    flag = 0
+
+    for u in G.keys():# a country
+        adj = G[u] # take adj countries
+
+        print 'for node', u, adj
+        for color in colorArray:
+            flag = 0
+            print 'color now', color
+            for v in adj: # one by one (adj country)
+                if v in mapColor.keys() and color == mapColor[v]:
+                    print 'color', color, 'rejected by', v
+                    flag = 1
+                    break
+
+            if flag == 0:
+                mapColor[u] = color
+                print 'color given------------>', u, color
+                break
+    disp(mapColor)
+
+
+mapColorMin(G)
+
+'''
+output
+ 
+1 --> [2, 3]
+2 --> [1, 3]
+3 --> [1, 2, 4, 5, 6]
+4 --> [3, 5]
+5 --> [3, 4, 6]
+6 --> [3, 5]
+7 --> [None]
+None
+for node 1 [2, 3]
+color now red
+color given------------> 1 red
+for node 2 [1, 3]
+color now red
+color red rejected by 1
+color now blue
+color given------------> 2 blue
+for node 3 [1, 2, 4, 5, 6]
+color now red
+color red rejected by 1
+color now blue
+color blue rejected by 2
+color now green
+color given------------> 3 green
+for node 4 [3, 5]
+color now red
+color given------------> 4 red
+for node 5 [3, 4, 6]
+color now red
+color red rejected by 4
+color now blue
+color given------------> 5 blue
+for node 6 [3, 5]
+color now red
+color given------------> 6 red
+for node 7 [None]
+color now red
+color given------------> 7 red
+1 --> red
+2 --> blue
+3 --> green
+4 --> red
+5 --> blue
+6 --> red
+7 --> red
+
+Process finished with exit code 0
+
+'''
