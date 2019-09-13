@@ -1,0 +1,183 @@
+#disp
+def disp(M):
+    for i in range(3):
+        print M[i]
+#all_same
+def all_3_same(N):
+    if N[0] == 'X' and N[1] == 'X' and N[2] == 'X':
+        return True
+    elif N[0] == 'O' and N[1] == 'O' and N[2] == 'O':
+        return True
+    else:
+        return False
+#def conv
+def conv(index):
+    return index / 3,  index % 3
+
+#check func
+def check(M):
+
+    flag = 0
+    #rows check
+    for i in range(3):
+        R = M[i]
+        if all_3_same(R):
+            flag = 1
+    #col check
+    for i in range(3):
+        C = []
+        for j in range(3):
+            C.append(M[j][i])
+        if all_3_same(C):
+            flag = 1
+    # diag1 check - primary diagonal
+    D = []
+    for j in range(3):
+        D.append(M[j][j])
+    if all_3_same(D):
+        flag = 1
+    # diag2 check
+    D = []
+    for j in range(3):
+        D.append(M[j][2-j])
+    if all_3_same(D):
+        flag = 1
+    return True if flag == 1 else False
+
+#game
+TTT = [[' ', ' ', ' '], [' ', ' ', ' '], [' ', ' ', ' ']]
+index_M = [['0', '1', '2'], ['3', '4', '5'], ['6', '7', '8']]
+player = 'X'
+game_flag = 0
+while game_flag == 0:
+
+    disp(TTT)
+    print '\n'
+    disp(index_M);
+
+    print '\nEnter the position'
+    if player == 'X':
+        index = input('player_1 X: ')
+    else:
+        index = input('player_2 O: ')
+
+    if index in range(9):
+        x, y = conv(index)
+        if TTT[x][y] == ' ':
+            TTT[x][y] = player
+            if player == 'X': player = 'O'
+            elif player == 'O': player = 'X'
+
+            if check(TTT):
+                print 'player wins', player
+                game_flag = 1
+        else:
+            print 'already filled.'
+    else:
+        print 'Enter between 0 and 8.'
+        continue
+    if game_flag == 1:
+        disp(TTT)
+        break
+'''
+output 
+
+
+[' ', ' ', ' ']
+[' ', ' ', ' ']
+[' ', ' ', ' ']
+
+
+['0', '1', '2']
+['3', '4', '5']
+['6', '7', '8']
+
+Enter the position
+player_1 X: 1
+[' ', 'X', ' ']
+[' ', ' ', ' ']
+[' ', ' ', ' ']
+
+
+['0', '1', '2']
+['3', '4', '5']
+['6', '7', '8']
+
+Enter the position
+player_2 O: 4
+[' ', 'X', ' ']
+[' ', 'O', ' ']
+[' ', ' ', ' ']
+
+
+['0', '1', '2']
+['3', '4', '5']
+['6', '7', '8']
+
+Enter the position
+player_1 X: 6
+[' ', 'X', ' ']
+[' ', 'O', ' ']
+['X', ' ', ' ']
+
+
+['0', '1', '2']
+['3', '4', '5']
+['6', '7', '8']
+
+Enter the position
+player_2 O: 22
+Enter between 0 and 8.
+[' ', 'X', ' ']
+[' ', 'O', ' ']
+['X', ' ', ' ']
+
+
+['0', '1', '2']
+['3', '4', '5']
+['6', '7', '8']
+
+Enter the position
+player_2 O: 1
+already filled.
+[' ', 'X', ' ']
+[' ', 'O', ' ']
+['X', ' ', ' ']
+
+
+['0', '1', '2']
+['3', '4', '5']
+['6', '7', '8']
+
+Enter the position
+player_2 O: 8
+[' ', 'X', ' ']
+[' ', 'O', ' ']
+['X', ' ', 'O']
+
+
+['0', '1', '2']
+['3', '4', '5']
+['6', '7', '8']
+
+Enter the position
+player_1 X: 2
+[' ', 'X', 'X']
+[' ', 'O', ' ']
+['X', ' ', 'O']
+
+
+['0', '1', '2']
+['3', '4', '5']
+['6', '7', '8']
+
+Enter the position
+player_2 O: 0
+player wins X
+['O', 'X', 'X']
+[' ', 'O', ' ']
+['X', ' ', 'O']
+
+Process finished with exit code 0
+
+'''
