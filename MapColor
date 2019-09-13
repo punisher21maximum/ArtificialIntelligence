@@ -69,7 +69,7 @@ def mapColorMin(G):
                 print 'color given------------>', u, color
                 break
     disp(mapColor)
-
+    print 'minimum number of colors required: ', len(set(mapColor.values()))
 
 mapColorMin(G)
 
@@ -120,6 +120,7 @@ color given------------> 7 red
 5 --> blue
 6 --> red
 7 --> red
+minimum number of colors required:  3
 
 Process finished with exit code 0
 
