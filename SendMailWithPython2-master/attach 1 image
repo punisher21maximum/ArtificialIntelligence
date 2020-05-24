@@ -1,0 +1,37 @@
+2] attach 1 image
+# Python code to illustrate Sending mail from 
+# your Gmail account 
+import smtplib
+#IMAGE
+import imghdr
+'''
+msg
+'''
+from email.message import EmailMessage
+sender = "beyond21max@gmail.com" ;
+password = "Maxeffort@21"
+reciever = 'effort21pool@gmail.com'
+msg = EmailMessage()
+msg['Subject'] = "Grab some Dinner and foto"
+msg['From'] = sender
+msg['To'] = reciever
+msg.set_content('image attatched')
+with open('my_foto.jpg', 'rb') as f:
+          file_data = f.read()
+          file_type = imghdr.what(f.name)
+          file_name = f.name
+          print(file_type)
+msg.add_attachment(file_data, maintype='image',
+                   subtype = file_type, filename = file_name)
+# creates SMTP session 
+s = smtplib.SMTP('smtp.gmail.com', 587) 
+s.ehlo()
+s.starttls()
+s.ehlo()
+# Authentication 
+s.login(sender, password) 
+# sending the mail 
+s.send_message(msg) 
+print("success")
+# terminating the session 
+s.quit()

@@ -1,0 +1,40 @@
+4]attach pdf in 5]
+5]multi reciver 
+# Python code to illustrate Sending mail from 
+# your Gmail account 
+import smtplib
+#IMAGE
+import imghdr
+'''
+msg
+'''
+from email.message import EmailMessage
+sender = "beyond21max@gmail.com" ;
+password = "Maxeffort@21"
+reciever = 'effort21pool@gmail.com'
+reciever_list =['effort21pool@gmail.com', 'beyond21max@gmail.com']
+msg = EmailMessage()
+msg['Subject'] = "heyyyy multi"
+msg['From'] = sender
+msg['To'] = ', '.join(reciever_list)
+msg.set_content('image attatched')
+files = ['TY.pdf']
+for file in files:
+          with open(file, 'rb') as f:
+                    file_data = f.read()
+                    #file_type = imghdr.what(f.name)
+                    file_name = f.name
+          msg.add_attachment(file_data, maintype='application',
+                             subtype = 'octet-stream', filename = file_name)
+# creates SMTP session 
+s = smtplib.SMTP('smtp.gmail.com', 587) 
+s.ehlo()
+s.starttls()
+s.ehlo()
+# Authentication 
+s.login(sender, password) 
+# sending the mail 
+s.send_message(msg) 
+print("success")
+# terminating the session 
+s.quit()

@@ -1,0 +1,28 @@
+1 TEXT
+# Python code to illustrate Sending mail from 
+# your Gmail account 
+import smtplib 
+'''
+msg
+'''
+from email.message import EmailMessage
+sender = "beyond21max@gmail.com" ;
+password = "Maxeffort@21"
+reciever = 'effort21pool@gmail.com'
+msg = EmailMessage()
+msg['Subject'] = "Grab some Dinner"
+msg['From'] = sender
+msg['To'] = reciever
+msg.set_content('How about dinner at 6pm')
+# creates SMTP session 
+s = smtplib.SMTP('smtp.gmail.com', 587) 
+s.ehlo()
+s.starttls()
+s.ehlo()
+# Authentication 
+s.login(sender, password) 
+# sending the mail 
+s.send_message(msg) 
+print("success")
+# terminating the session 
+s.quit()
