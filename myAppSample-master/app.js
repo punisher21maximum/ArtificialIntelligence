@@ -1,0 +1,1 @@
+console.log('say hello to Mad Max Fury');
