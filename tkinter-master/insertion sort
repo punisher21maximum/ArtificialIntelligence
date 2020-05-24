@@ -1,0 +1,179 @@
+from tkinter import *
+import Tkinter as tk ; import time
+import threading # caller
+root=Tk() 
+root.title('Vishal Singh - Sorting Visualization')
+wd='1100' ; ht='650'
+geo = wd+'x'+ht + '+' + '120'+ '+' + '10'
+print geo
+root.geometry(geo)
+ 
+  
+# ************** input array ************************* 
+kVar = StringVar()
+kVar.set('4 3 2 9 1 5 6')
+entry1 = Entry(root, textvar=kVar, font='timesnewroman 30 bold',
+    fg='dark green', relief=RAISED, bd=10)
+entry1.grid(row=4, column=0, columnspan=20, ipadx=70, pady=30)
+ 
+#help text   
+help_text = '''Begin from the left and search for ele greater than last.
+insert the last, before the it.'''
+Label(root, text=help_text,font='timesnewroman 12 bold',
+    fg='dark green'  ).grid(row=5, 
+    column=0, columnspan=20, ipadx=0, pady=5)
+# ************** input END *************************** 
+    
+# ************** create array from input Entry ******** 
+# k = '4 3 2 10 12 1 5 6'
+k = kVar.get()
+k = k.split()
+print k
+# ************** END create array from input Entry **** 
+# ************** status Var *********
+statusVar = StringVar()
+statusVar.set('')
+Label(root,textvar=statusVar, font='timesnewroman 20 bold', fg='dark green').grid(row=2,
+                    column=0, columnspan=20, pady=30)
+
+
+lastVar = StringVar()
+lastVar_bg = StringVar() ; lastVar_bg.set('dark green')
+
+speedVar = IntVar() ; speedVar.set(200)
+
+array_i_Var = IntVar() ; array_i_Var.set(0)
+# ************** END status Var ***********************
+# ************* disp ori array **********************
+def disp(k,j,color_code='#1c932b'):            
+    var=IntVar()
+    for i in range(len(k)) : 
+        var.set(k[i])
+        #default values for all
+        bg='#1c932b'
+        relief = RAISED
+        bd = 5 ; font = 'timesnewroman 20 bold'
+        #end
+        if j == -1:#all green
+            pass
+        elif j == -2: #sort complete!!!
+            bg='#1c932b' ; 
+            relief = RIDGE ;  
+            lastVar.set('Sorted!') ; lastVar_bg.set('dark green')
+        elif j==-3:
+            last_index = color_code
+            if i == last_index:
+                bg='blue'
+            elif i == last_index-1:
+                bg='red'
+        elif i==j :
+            bg=color_code
+            
+        w=Label(root, text=k[i], font=font, fg='white', bg=bg,
+                   relief=relief, bd=bd)
+#             w.pack_forget()
+        w.grid(row=1, column=i, ipadx=20, padx=30, pady=60)
+        #last
+        Label(root,textvar=lastVar, font='timesnewroman 30 bold', fg='white', bg=lastVar_bg.get(),
+                   relief=RAISED, bd=5,).grid(row=3,
+                    column=0, columnspan=20, pady=10, ipadx=15)
+    #pause
+    root.after(speedVar.get())
+    root.update()
+        
+# *************disp ori array END **********************
+# ************* selection **********************
+def insertion(k):
+    
+    k = k.get()
+    k = k.split()
+    k = [int(i) for i in k]
+    
+    for i in range( 1, len(k)+1 ):
+        root.after(speedVar.get())
+        root.update()
+        
+        last = k[i-1] ; 
+        lastVar.set('last '+str(last))
+        # case 1 - all green ; -1 green
+        disp(k,-1) # setting last --> all - green
+
+        for j in range( i ):
+            #
+            array_i_Var.set(i) # *************************** 
+            print '-----------'
+            # case 2 - find greater - orange ; j , orange
+            print 'find greater in from - start to - i'
+            statusVar.set(str(k[j])+' and '+str(last)+'  comparing - finding greater than '+str(last))
+            disp(k,j,'orange') # 0 --> find greater - orange
+            
+
+            if last < k[j]  :
+                print 'found smaller than last'
+                # case 3 - found greater - black ; j , black
+                
+                statusVar.set(str(k[j])+' > '+str(last)+'  found '+str(k[j]))
+                disp(k,j,'black') # 0 --> found black
+
+                
+                #swapping
+                diff = i - j
+                last_index = i-1
+                statusVar.set('shifting')
+                # case 4 - shift : right red ; j , red
+                disp(k,last_index,'red')  #  --> shift : right red
+                
+                for z in range( diff-1 ):
+                    
+                    
+                    k[last_index] = k[last_index-1]
+                    
+                    # case 5 - shift : right blue ; j , blue
+                    # case 6 - shift : left red ; j , red
+                    #  --> shift : left red  #  --> shift : right blue
+#                     disp(k,last_index-1,'red') ; disp(k,last_index,'blue')
+                    disp(k,-3,last_index)
+
+                    disp(k,last_index-1,'blue')  #  --> shift : right red
+
+                    statusVar.set('...')
+
+                    
+                    last_index -= 1
+                         
+                
+                k[j] = last
+                root.after(speedVar.get())
+                root.update()
+                # case 7 -  replace by last ; j , purple
+                disp(k,j,'purple')
+           
+                break
+
+                
+            statusVar.set('...')
+            root.after(speedVar.get())
+            root.update()
+        
+        
+    root.after(speedVar.get())
+    root.update()       
+    #case 8 sorting complete! ; -2 
+    disp(k,-2)# finally done --> change relief
+    statusVar.set('sorting complete!')
+
+    
+# ************* BUBBLE END **********************
+
+# heading as INSERTION sort button / start button
+disp(k,-1)
+b=Button(root, text='INSERTION\nSORT', command=lambda : insertion(kVar) , font='timesnewroman 20 bold', 
+         fg='dark green', relief=RAISED, bd=5);b.grid(row=0, column=0, ipadx=0, 
+                   pady=0)
+b=Button(root, text='BUBBLE\nSORT', command=lambda : insertion(kVar) , font='timesnewroman 20 bold', 
+         fg='dark green', relief=RAISED, bd=5);b.grid(row=0, column=1, ipadx=0, 
+                   pady=0)
+# b.invoke()
+# END
+ 
+root.mainloop()

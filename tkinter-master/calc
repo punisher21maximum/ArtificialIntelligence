@@ -1,0 +1,64 @@
+from tkinter import *
+
+root = Tk()
+root.geometry("500x600")
+
+def click(event):
+    global scvalue
+    text = event.widget.cget("text")
+    print text
+    if text == "=":
+        if scvalue.get().isdigit():
+            value = int(scvalue.get())
+        else:
+            try:
+                value = eval(screen.get())
+
+            except Exception as e:
+                print(e)
+                value = "Error"
+
+
+        scvalue.set(value)
+        screen.update()
+    elif text == "C":
+        scvalue.set("") # clear screen value
+        screen.update() # update it
+    else:
+        scvalue.set(scvalue.get() + text)
+        screen.update()
+     
+    
+    
+#input Frame
+scvalue = StringVar()
+scvalue.set("")
+screen = Entry(root, textvar=scvalue, font="lucida 35 bold",
+               borderwidth = 20,
+               relief = RIDGE)
+screen.pack(fill=X, ipadx=8, pady=10, padx=10)
+
+#---------------------------------
+btnA = '''
+9 8 7 %
+6 5 4 -
+3 2 1 *
+0 / . +
+C ( ) = 
+'''
+btnA = btnA.split()
+
+print btnA, len(btnA), type(btnA)
+
+for i in range(0, len(btnA), 4):
+    frame = Frame(root, bg="grey")
+    for j in range(4):
+        b = Button(frame, text=btnA[i+j], padx=30, pady=8, font="lucida 20 bold",
+            borderwidth = 10,
+            relief = RIDGE)
+        b.pack(side=LEFT, padx=5, pady=3)
+        b.bind("<Button-1>", click)
+    frame.pack()
+#----------------------------------
+
+root.mainloop()

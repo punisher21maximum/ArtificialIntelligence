@@ -1,0 +1,159 @@
+from tkinter import *
+import Tkinter as tk ; import time
+import threading # caller
+root=Tk() 
+root.title('Vishal Singh - Sorting Visualization')
+ht='750' ; wd='650'
+geo = ht+'x'+wd + '+' + '350'+ '+' + '10'
+print geo
+root.geometry(geo)
+ 
+  
+# ************** input array ************************* 
+kVar = StringVar()
+kVar.set('5 4 3 2 1')
+entry1 = Entry(root, textvar=kVar, font='timesnewroman 30 bold',
+    fg='dark green', relief=RAISED, bd=10)
+entry1.grid(row=4, column=0, columnspan=20, ipadx=70, pady=30)
+ 
+#help text   
+help_text = '''If value smaller than min value, than swap.
+Min value is first element of unsorted array.'''
+Label(root, text=help_text,font='timesnewroman 12 bold',
+    fg='dark green'  ).grid(row=5, 
+    column=0, columnspan=20, ipadx=0, pady=5)
+# ************** input END *************************** 
+    
+# ************** create array from input Entry ******** 
+k = '5 4 3 2 1'
+k = kVar.get()
+k = k.split()
+print k
+# ************** END create array from input Entry **** 
+# ************** status Var *********
+statusVar = StringVar()
+statusVar.set('')
+Label(root,textvar=statusVar, font='timesnewroman 20 bold', fg='dark green').grid(row=2,
+                    column=0, columnspan=20, pady=30)
+
+
+minnVar = StringVar()
+minnVar_bg = StringVar() ; minnVar_bg.set('black')
+
+speedVar = IntVar() ; speedVar.set(2000)
+# ************** END status Var ***********************
+# ************* disp ori array **********************
+def disp(k,key,j,done_i):            
+    var=IntVar()
+    for i in range(len(k)) : 
+        var.set(k[i])
+        #default values for all
+        bg='#1c932b'
+        relief = RAISED
+        #end
+        if key == 0:  #before
+            if i==j:             #left 
+                bg='#b31b00'             #red
+                minnVar_bg.set('#16337e')
+#             elif i==(j+1):       #right
+#                 bg='#16337e'            #blue
+        elif key == 1: #after
+            if i==j:             #left 
+                bg='#16337e'            #blue
+                minnVar_bg.set('#b31b00')
+#             elif i==(j+1):       #right
+#                 bg='#b31b00'            #red
+        elif key == 2: #next pair
+            if i==j:# or i==(j+1):
+                bg = 'orange'
+                minnVar_bg.set('orange')
+        elif key == 3: #sort complete!!!
+            bg='#1c932b' ; 
+            relief = RIDGE ;  
+            minnVar.set('Sorted!') ; minnVar_bg.set('dark green')
+        if i < (done_i): #ridge the done ones from right
+            relief = RIDGE ; bg='#1c932b'
+
+        w=Label(root, text=k[i], font='timesnewroman 30 bold', fg='white', bg=bg,
+                   relief=relief, bd=5,)
+#             w.pack_forget()
+        w.grid(row=1, column=i, ipadx=20, padx=30, pady=60)
+        #minn
+        Label(root,textvar=minnVar, font='timesnewroman 30 bold', fg='white', bg=minnVar_bg.get(),
+                   relief=RAISED, bd=5,).grid(row=3,
+                    column=0, columnspan=20, pady=10, ipadx=15)
+        
+# *************disp ori array END **********************
+# ************* BUBBLE **********************
+def bubble(k):
+    
+    k = k.get()
+    k = k.split()
+    k = [int(i) for i in k]
+    
+    for i in range( len(k) ):
+        minn = k[i] ; 
+        minnVar.set('min '+str(minn))
+        for j in range( i, len(k) ):
+            print '-----------'
+            if k[j] < minn:
+                print 'swapping'
+                x=str(k[j]) ; y=str(minn)
+                statusVar.set(x+' < '+y+'  swapping [before]')
+
+                print 'before swap' ; print k
+                disp(k,0,j,i) # 0 --> before swap  red blue
+                print 'after'
+                
+                root.after(speedVar.get())
+                root.update()
+                
+                #swapping
+                temp = minn
+                minn = k[j]
+                k[j] = temp
+                #swapping done
+                statusVar.set(x+' and '+y+'  swapped [after]')
+                minnVar.set('min '+str(minn))
+                
+                print 'swapped : ', k
+                disp(k,1,j,i)# 1 --> after swapping ; blue red
+                
+                root.after(speedVar.get())
+                root.update()
+ 
+            else:
+                statusVar.set('x'+' <= '+'y'+'  no swapping')
+                
+                
+            disp(k,2,j,i) # 2 --> done, move to next pair ;  yellow yellow
+            statusVar.set('...')
+ 
+            root.after(speedVar.get())
+            root.update()
+        k[i] = minn
+            
+    disp(k,3,0,i)# finally done --> change relief
+    statusVar.set('sorting complete!')
+
+    
+# ************* BUBBLE END **********************
+
+# heading as BUBBLE sort button / start button
+b=Button(root, text='SELECTION SORT', command=lambda : bubble(kVar) , font='timesnewroman 30 bold', 
+         fg='dark green', relief=RAISED, bd=5, width=30);b.grid(row=0, column=0, columnspan=15, ipadx=20, 
+                   pady=0)
+# b.invoke()
+# END
+ 
+root.mainloop()
+
+'''
+from Tkinter import *
+from tkColorChooser import askcolor              
+def getColor():
+    color = askcolor() 
+    print color
+Button(text='Select Color', command=getColor).pack()
+mainloop()
+'''

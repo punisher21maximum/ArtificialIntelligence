@@ -1,0 +1,108 @@
+from tkinter import *
+import Tkinter as tk ; import time
+import threading # caller
+root=Tk() 
+ht='700' ; wd='650'
+geo = ht+'x'+wd + '+' + '350'+ '+' + '10'
+print geo
+root.geometry(geo)
+ 
+  
+# ************** input array ********************************
+kVar = StringVar()
+kVar.set('5 4 3 2 1')
+entry1 = Entry(root, textvar=kVar, font='timesnewroman 30 bold',
+    fg='dark green')
+entry1.grid(row=3, column=0, columnspan=20, ipadx=70)
+ 
+#***frame1END
+# ************** input END ********************************    
+    
+    
+    
+k = '4 5 3 2 1 23'
+k = kVar.get()
+k = k.split()
+print k
+
+statusVar = StringVar()
+statusVar.set('')
+Label(root,textvar=statusVar, font='timesnewroman 20 bold', fg='black').grid(row=2,
+                    column=0, columnspan=20, pady=30)
+# *************disp ori array END **********************
+ 
+
+def disp(k,BA,swap):            
+    var=IntVar()
+    row_val = 1 if BA == 0 else 3
+    row_val = 1
+    for i in range(len(k)) : 
+            var.set(k[i])
+            fg='dark green'
+            if BA == 0: #before
+                if i==swap:
+                    fg='red'
+                elif i==(swap+1):
+                    fg='blue'
+            else: #after
+                if i==swap:
+                    fg='blue'
+                elif i==(swap+1):
+                    fg='red'
+            Label(root, text=k[i], font='timesnewroman 30 bold', fg='white', bg=fg,
+                       relief=RAISED, bd=5
+                 ).grid(row=row_val, column=i, ipadx=20, padx=20)
+        
+# Label(root, text='BUBBLE SORT', font='timesnewroman 30 bold', fg='dark green',
+#                    relief=RAISED, bd=5).grid(row=0, column=0, columnspan=7)
+# Label(root, text='after', font='timesnewroman 30 bold', fg='dark green',
+#                    relief=RAISED, bd=5).grid(row=2, column=1, columnspan=7, ipadx=100)
+
+ 
+def bubble(k):
+    
+    k = k.get()
+    k = k.split()
+    for i in range( len(k)-1 ):
+        for j in range( len(k)-i-1 ):
+            print '-----------'
+            
+            if k[j] > k[j+1]:
+                x=k[j] ; y=k[j+1]
+                statusVar.set(x+' > '+y+'  swapping')
+
+                
+                print 'before' ; print k
+                disp(k,0,j)
+                print 'after'
+                
+                root.after(2000)
+                root.update()
+                
+                temp = k[j]
+                k[j] = k[j+1]
+                k[j+1] = temp
+                
+                statusVar.set(x+' and '+y+'  swapped')
+
+                
+                print 'CHANGED : ', k
+                disp(k,1,j)
+
+            else:
+                statusVar.set('x'+' <= '+'y'+' -- no swapping')
+                disp(k,1,j)
+ 
+ 
+            root.after(2000)
+            root.update()
+
+            
+b=Button(root, text='BUBBLE SORT', command=lambda : bubble(kVar) , font='timesnewroman 30 bold', 
+         fg='dark green', relief=RAISED, bd=5, width=27);b.grid(row=0, column=0, columnspan=15, ipadx=20, 
+                   pady=20)
+# b.invoke()
+
+ 
+
+root.mainloop()
